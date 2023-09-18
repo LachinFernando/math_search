@@ -77,7 +77,7 @@ def load_transformer_model():
 
 @st.cache_data
 def load_embeddings():
-    embeddings = pd.read_csv(EMBEDDING_CSV)
+    embeddings = pd.concat(list(map(pd.read_csv, ["chunk_0.csv", "chunk_1.csv"])), ignore_index = True)
     return np.array(embeddings.iloc[:,:-1].values), embeddings[QUESTION_COLUMN_NAME].to_list()
 
 
