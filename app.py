@@ -161,25 +161,6 @@ st.markdown(about_div, unsafe_allow_html = True)
 #create tabs
 tab1, tab2 = st.tabs(["Questions 🧮", "Dashboard 📊"])
 
-with tab2:
-    st.header("Feedback Analysis")
-    st.subheader("Feedback Data")
-
-    if not os.path.exists(FEEDBACK_CSV):
-        st.error("Take Some Feedbacks from Users to view the Analytics 🚨")
-    else:
-        #read the data
-        feedbacks = pd.read_csv(FEEDBACK_CSV)
-        st.dataframe(feedbacks)
-        #count plot
-        sns.set_theme(style="whitegrid", palette="pastel")
-        chart_fig = plt.figure(figsize=(5,5))
-        sns.countplot(data = feedbacks, x = FEEDBACK_COLUMN_THREE)
-        plt.xlabel("Feedback")
-        plt.ylabel("Count")
-        plt.title("Feedback Distribution")
-        st.pyplot(chart_fig)
-
     
 #tab1
 with tab1:
@@ -225,13 +206,32 @@ with tab1:
 
                 with col1:
                     #set feedback buttons
-                    if st.button("Yes", type = "primary", on_click=disabled, disabled=st.session_state.disabled):
+                    if st.button("Yes", type = "primary", on_click=disabled, disabled=st.session_state.disabled, use_container_width = True):
                         feedback_state = update_feedback(datetime.now(), question, "Yes")
 
                 with col2:
-                    if st.button("No", type = "primary", on_click=disabled, disabled=st.session_state.disabled):
+                    if st.button("No", type = "primary", on_click=disabled, disabled=st.session_state.disabled, use_container_width = True):
                         feedback_state = update_feedback(datetime.now(), question, "No")
 
                 #say thank you if the feedback is given
                 if feedback_state:
                     st.header("Thank You For Your Feedback!")
+
+with tab2:
+    st.header("Feedback Analysis")
+    st.subheader("Feedback Data")
+
+    if not os.path.exists(FEEDBACK_CSV):
+        st.error("Take Some Feedbacks from Users to view the Analytics 🚨")
+    else:
+        #read the data
+        feedbacks = pd.read_csv(FEEDBACK_CSV)
+        st.dataframe(feedbacks)
+        #count plot
+        sns.set_theme(style="whitegrid", palette="pastel")
+        chart_fig = plt.figure(figsize=(5,5))
+        sns.countplot(data = feedbacks, x = FEEDBACK_COLUMN_THREE)
+        plt.xlabel("Feedback")
+        plt.ylabel("Count")
+        plt.title("Feedback Distribution")
+        st.pyplot(chart_fig)
