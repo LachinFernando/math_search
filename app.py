@@ -65,7 +65,7 @@ if 'disabled' not in st.session_state:
     st.session_state.disabled = False
 print(st.session_state)
 
-@st.cache_data
+
 def page_count():
     if not os.path.exists(PAGE_COUNT_CSV):
         df = pd.DataFrame({"Status": "Opened", "Time": str(datetime.now())}, index = [0])
