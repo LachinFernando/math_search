@@ -15,6 +15,7 @@ FEEDBACK_CSV = "feedback.csv"
 FEEDBACK_COLUMN_ONE = "Date"
 FEEDBACK_COLUMN_TWO = "Question"
 FEEDBACK_COLUMN_THREE = "Feedback"
+PAGE_COUNT_CSV = "page.csv"
 
 STYLING = """
     <style>
@@ -64,6 +65,19 @@ if 'disabled' not in st.session_state:
     st.session_state.disabled = False
 print(st.session_state)
 
+@st.cache_data
+def page_count():
+    if not os.path.exists(PAGE_COUNT_CSV):
+        df = pd.DataFrame({"Status": "Opened", "Time": str(datetime.datetime.now())}, index = [0])
+        df.to_csv(PAGE_COUNT_CSV, index = False)
+        return df.shape[0]
+
+    else:
+        df = pd.read_csv(PAGE_COUNT_CSV)
+        new_df = pd.concat([df, pd.DataFrame({"Status": "Opened","Time": str(datetime.datetime.now())}, index=[0])], axis = 0)
+        new_df.to_csv(PAGE_COUNT_CSV, index=False)
+        return new_df.shape[0]
+
 def disabled():
     st.session_state.disabled = True
 
@@ -84,6 +98,8 @@ def load_embeddings():
 #load models
 semantic_model = load_transformer_model()
 embeddings, questions_db = load_embeddings()
+# call the page count method
+visitors = page_count()
 
 
 def get_similar_question(query, num_questions, model, question_embeddings, main_questions):
@@ -217,6 +233,8 @@ with tab1:
                 #say thank you if the feedback is given
                 if feedback_state:
                     st.header("Thank You For Your Feedback!")
+                #page viewes
+                st.subheader("Total Visitors {}".format(visitors))
 
 with tab2:
     st.header("Feedback Analysis")
