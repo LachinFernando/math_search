@@ -70,12 +70,14 @@ def page_count():
     if not os.path.exists(PAGE_COUNT_CSV):
         df = pd.DataFrame({"Status": "Opened", "Time": str(datetime.now())}, index = [0])
         df.to_csv(PAGE_COUNT_CSV, index = False)
+        print("created")
         return df.shape[0]
 
     else:
         df = pd.read_csv(PAGE_COUNT_CSV)
         new_df = pd.concat([df, pd.DataFrame({"Status": "Opened","Time": str(datetime.now())}, index=[0])], axis = 0)
         new_df.to_csv(PAGE_COUNT_CSV, index=False)
+        print(new_df.shape)
         return new_df.shape[0]
 
 def disabled():
