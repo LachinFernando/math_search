@@ -102,6 +102,7 @@ semantic_model = load_transformer_model()
 embeddings, questions_db = load_embeddings()
 # call the page count method
 visitors = page_count()
+print("VISITORS", visitors)
 
 
 def get_similar_question(query, num_questions, model, question_embeddings, main_questions):
